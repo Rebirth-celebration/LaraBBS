@@ -29,12 +29,15 @@ class UserRequest extends FormRequest
                 . Auth::id(),
             'email' => 'required|email',
             'introduction' => 'max:80',
+            'avatar'=>'mimes:jpeg,bmp,png,gif|dimensions:min_width=208,min_height=208',
         ];
     }
 
     public function messages()
     {
         return [
+            'avatar.mimes'=>'头像必须是 jpeg，bmp，png，gif 格式的图片',
+            'avatar.dimensions'=>'头像的清晰度不够，高和宽需要 208px以上',
             'name.unique' => '用户名已被占用，请重新填写',
             'name.regex' => '用户名只支持英文、数字、横杠和下划线。',
             'name.between' => '用户名必须介于 3 - 25 个字符之间。',
