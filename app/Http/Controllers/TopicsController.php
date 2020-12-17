@@ -34,7 +34,7 @@ class TopicsController extends Controller
         return view('topics.create_and_edit', compact('topic', 'categories'));
     }
 
-    public function store(TopicRequest $request,Topic $topic)
+    public function store(TopicRequest $request, Topic $topic)
     {
         $topic->fill($request->all());
         $topic->user_id = Auth::id();
@@ -48,7 +48,7 @@ class TopicsController extends Controller
     {
         $this->authorize('update', $topic);
         $categories = Category::all();
-        return view('topics.create_and_edit', compact('topic','categories'));
+        return view('topics.create_and_edit', compact('topic', 'categories'));
     }
 
     public function update(TopicRequest $request, Topic $topic)
@@ -56,7 +56,8 @@ class TopicsController extends Controller
         $this->authorize('update', $topic);
         $topic->update($request->all());
 
-        return redirect()->route('topics.show', $topic->id)->with('message', 'Updated successfully.');
+        return redirect()->route('topics.show', $topic->id)
+            ->with('success', '更新成功！');
     }
 
     public function destroy(Topic $topic)
@@ -67,18 +68,18 @@ class TopicsController extends Controller
         return redirect()->route('topics.index')->with('message', 'Deleted successfully.');
     }
 
-    public function uploadImage(Request $request,ImageUploadHandler $uploader)
+    public function uploadImage(Request $request, ImageUploadHandler $uploader)
     {
         //初始化返回数据，默认是失败的
         $data = [
-            'success'=>false,
-            'msg'=>'上传失败！',
-            'file_path'=>'',
+            'success' => false,
+            'msg' => '上传失败！',
+            'file_path' => '',
         ];
         //判断是否有上传文件，赋值给 $file
         if ($file = $request->upload_file) {
             //保存图片到本地
-            $result = $uploader->save($file,'topics',\Auth::id(),1024);
+            $result = $uploader->save($file, 'topics', \Auth::id(), 1024);
             //图片保存成功的话
             if ($request) {
                 $data['file_path'] = $result['path'];
